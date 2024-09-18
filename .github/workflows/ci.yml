@@ -38,11 +38,12 @@ jobs:
 
     - name: Install Go Migrate
       run: |
-        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.1/migrate.linux-amd64.tar.gz | tar xvzf
-        ls -al
-        chmod +x migrate.linux-amd64
-        sudo mv ./migrate.linux-amd64/ /usr/bin/
-        which migrate
+          curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.1/migrate.linux-amd64.tar.gz -o migrate.tar.gz
+          tar -xvzf migrate.tar.gz
+          ls -al
+          chmod +x migrate.linux-amd64
+          sudo mv migrate.linux-amd64 /usr/bin/migrate
+          which migrate
     - name: Run DB migration
       run: make migrationup
 
