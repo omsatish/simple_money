@@ -10,7 +10,7 @@ import (
 )
 
 const createTransfer = `-- name: CreateTransfer :one
-INSERT INTO transfer (
+INSERT INTO transfers (
   from_account_id,
   to_account_id,
   amount
@@ -40,7 +40,7 @@ func (q *Queries) CreateTransfer(ctx context.Context, arg CreateTransferParams) 
 }
 
 const getTransfer = `-- name: GetTransfer :one
-SELECT id, from_account_id, to_account_id, amount, create_at FROM transfer
+SELECT id, from_account_id, to_account_id, amount, create_at FROM transfers
 WHERE id = $1 LIMIT 1
 `
 
@@ -58,7 +58,7 @@ func (q *Queries) GetTransfer(ctx context.Context, id int64) (Transfer, error) {
 }
 
 const listTransfers = `-- name: ListTransfers :many
-SELECT id, from_account_id, to_account_id, amount, create_at FROM transfer
+SELECT id, from_account_id, to_account_id, amount, create_at FROM transfers
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -75,7 +75,7 @@ func (q *Queries) ListTransfers(ctx context.Context, arg ListTransfersParams) ([
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Transfer
+	items := []Transfer{}
 	for rows.Next() {
 		var i Transfer
 		if err := rows.Scan(
